@@ -1,88 +1,105 @@
-import React, {Component} from 'react';
+import React, { useState } from "react";
 
+const GeneralInfo = (props) => {
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    profession: "",
+    email: "",
+    phoneNumber: "",
+  });
 
-class GeneralInfo extends Component {
-    constructor(props){
-        super(props);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-        this.state = {
-            name: '',
-            email: '',
-            phoneNumber: '',
-            isEditable: false,
-        }
+  const handleEdit = () => {
+    props.onEdit();
+    setFormValues(props.generalInfo);
+  };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.onSubmit(props.generalInfo);
+  };
 
-    }
+  const { firstName, lastName, profession, email, phoneNumber } = formValues;
 
-    handleInputChange = (event) => {
-        let { name, value } = event.target;
-        this.setState({[name]: value});
-    }
-
-    handleEditClick = () => {
-        this.props.onEdit();
-        this.setState(this.props.generalInfo);
-      };
-
-    handleSubmit = event => {
-        event.preventDefault();
-        this.props.onSubmit(this.state);
-      };
-
-    render(){
-        const { name, email, phoneNumber, isEditable} = this.state;
-        if(this.props.generalInfoEditing){
-            return (
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label htmlFor='name'>Name:</label>
-                        <input 
-                        type='text'
-                        id='name'
-                        name='name'
-                        value={name}
-                        onChange={this.handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor='Email'>Email:</label>
-                        <input 
-                        type='email'
-                        id='email'
-                        name='email'
-                        value={email}
-                        onChange={this.handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor='phoneNumber'>Phone Number:</label>
-                        <input 
-                        type='tel'
-                        id='phoneNumber'
-                        name='phoneNumber'
-                        value={phoneNumber}
-                        onChange={this.handleInputChange}
-                        />
-                    </div>
-                    <button type='submit'>Submit</button>
-
-                    </form>
-            )
-        } else {
-            return ( 
+  return (
+    <div>
+      <h2>GENERAL INFORMATION</h2>
+      {props.generalInfoEditing ? (
+        <form onSubmit={handleSubmit}>
+          <label>
+            First Name:
+            <input
+              type="text"
+              name="firstName"
+              value={firstName}
+              onChange={handleInputChange}
+            />
+             Last Name:
+            <input
+              type="text"
+              name="lastName"
+              value={lastName}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Profession:
+            <input
+              type="text"
+              name="profession"
+              value={profession}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Phone Number:
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={phoneNumber}
+              onChange={handleInputChange}
+            />
+          </label>
+          <button type="submit">Submit</button>
+        </form>
+      ) : (
         <div>
-            <h2>GENERAL INFORMATION</h2>
-            <p>Name: {name}</p>
-            <p>Email: {email}</p>
-            <p>Phone Number: {phoneNumber}</p>
-            <button onClick={this.handleEditClick}>Edit Details</button>
+          <p>
+            First Name: {firstName}
+          </p>
+          <p>
+            Last Name: {lastName}
+          </p>
+          <p>
+            Email: {email}
+          </p>
+           <p>
+            Telephone: {phoneNumber}
+          </p> 
+          <p>
+            Profession: {profession}
+          </p>
+          <button onClick={handleEdit}>Edit Details</button>
         </div>
-           
-            )
-           
-        }
-    }
-}
+      )}
+    </div>
+  );
+  
 
+    
+    }
 export default GeneralInfo;
