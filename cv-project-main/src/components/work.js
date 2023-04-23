@@ -1,51 +1,44 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
+
+export default function Work(props) {
+  const [work, setWork] = useState({
+    companyName: '',
+    jobTitle: '',
+    jobDuration: '',
+  });
+
+  const handleInputChange = (event) => {
+    let { name, value } = event.target;
+    setWork(prevState => ({ ...prevState, [name]: value }));
+  }
+
+  const handleEdit = () => {
+    props.onEdit();
+    setWork(props.work);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.onSubmit(work);
+  };
 
 
-class Work extends Component {
-    constructor(props){
-        super(props);
+  
 
-        this.state = {
-            companyName: '',
-            jobTitle: '',
-            jobDuration: '',
-        }
-
-
-    }
-
-    handleInputChange = (event) => {
-        let { name, value } = event.target;
-        this.setState({[name]: value});
-    }
-
-    handleEdit = () => {
-        this.props.onEdit();
-        this.setState(this.props.work);
-      };
-
-    handleSubmit = event => {
-        event.preventDefault();
-        this.props.onSubmit(this.state);
-      };
-
-      
-  render() {
-
-    const {companyName, jobTitle, jobDuration} = this.state;
+    const {companyName, jobTitle, jobDuration} = work;
 
     return (
       <div>
         <h2>WORK EXPERIENCE</h2>
-        {this.props.workEditing ? (
-          <form onSubmit={this.handleSubmit}>
+        {props.workEditing ? (
+          <form onSubmit={handleSubmit}>
             <label>
               Company Name:
               <input
                 type="text"
                 name="companyName"
                 value={companyName}
-                onChange={this.handleInputChange}
+                onChange={handleInputChange}
               />
             </label>
             <label>
@@ -54,7 +47,7 @@ class Work extends Component {
                 type="text"
                 name="jobTitle"
                 value={jobTitle}
-                onChange={this.handleInputChange}
+                onChange={handleInputChange}
               />
             </label>
             <label>
@@ -63,7 +56,7 @@ class Work extends Component {
                 type="number"
                 name="jobDuration"
                 value={jobDuration}
-                onChange={this.handleInputChange}
+                onChange={handleInputChange}
               />
             </label>
             <button type="submit">Submit</button>
@@ -79,14 +72,10 @@ class Work extends Component {
             <p>
               Job Duration: {jobDuration}
             </p>
-            <button onClick={this.handleEdit}>Edit Details</button>
+            <button onClick={handleEdit}>Edit Details</button>
           </div>
         )}
       </div>
     );
   }
-}
 
-
-
-export default Work;
